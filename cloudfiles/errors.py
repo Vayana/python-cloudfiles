@@ -4,7 +4,7 @@ exception classes
 See COPYING for license information.
 """
 
-class Error(StandardError):
+class Error(Exception):
     """
     Base class for all errors and exceptions
     """

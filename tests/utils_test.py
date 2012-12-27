@@ -1,6 +1,6 @@
 
 import unittest
-from misc             import printdoc
+from .misc             import printdoc
 from cloudfiles.utils  import unicode_quote, parse_url
 
 @printdoc
@@ -63,6 +63,6 @@ def test_unicode_quote():
     quote method of the urlparse stdlib.
     """
     assert unicode_quote("non-unicode text") == "non-unicode%20text"
-    assert unicode_quote(u'\xe1gua.txt') == "%C3%A1gua.txt"
+    assert unicode_quote('\xe1gua.txt') == "%C3%A1gua.txt"
 
 # vim:set ai sw=4 ts=4 tw=0 expandtab:

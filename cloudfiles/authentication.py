@@ -8,10 +8,10 @@ and session tokens.
 See COPYING for license information.
 """
 
-from httplib  import HTTPSConnection, HTTPConnection
-from utils    import parse_url, THTTPConnection, THTTPSConnection
-from errors   import ResponseError, AuthenticationError, AuthenticationFailed
-from consts   import user_agent, us_authurl, uk_authurl
+from http.client  import HTTPSConnection, HTTPConnection
+from .utils    import parse_url, THTTPConnection, THTTPSConnection
+from .errors   import ResponseError, AuthenticationError, AuthenticationFailed
+from .consts   import user_agent, us_authurl, uk_authurl
 from sys      import version_info
 
 

@@ -9,11 +9,11 @@ from cloudfiles.errors import ResponseError, InvalidObjectName,\
 from cloudfiles.authentication import MockAuthentication as Auth
 from cloudfiles.consts import meta_name_limit, meta_value_limit,\
                               object_name_limit
-from fakehttp          import CustomHTTPConnection
-from misc              import printdoc
+from .fakehttp          import CustomHTTPConnection
+from .misc              import printdoc
 from tempfile          import mktemp
 import os
-from StringIO import StringIO
+from io import StringIO
 
 
 class ObjectTest(unittest.TestCase):
@@ -155,7 +155,7 @@ class ObjectTest(unittest.TestCase):
 
         obj.name = 'a'*(object_name_limit+1) # too-long string
         self.assertRaises(InvalidObjectName, obj.read)
-        self.assertRaises(InvalidObjectName, obj.stream().next)
+        self.assertRaises(InvalidObjectName, obj.stream().__next__)
         self.assertRaises(InvalidObjectName, obj.sync_metadata)
         self.assertRaises(InvalidObjectName, obj.write, '')
 

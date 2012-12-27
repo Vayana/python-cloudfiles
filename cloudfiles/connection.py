@@ -10,17 +10,18 @@ See COPYING for license information.
 
 import  socket
 import  os
-from    urllib    import urlencode
-from    httplib   import HTTPSConnection, HTTPConnection, HTTPException
-from    container import Container, ContainerResults
-from    utils     import unicode_quote, parse_url, THTTPConnection, THTTPSConnection
-from    errors    import ResponseError, NoSuchContainer, ContainerNotEmpty, \
+from    urllib.parse    import urlencode
+from    http.client   import HTTPSConnection, HTTPConnection, HTTPException
+from    .container import Container, ContainerResults
+from    .utils     import unicode_quote, parse_url
+#THTTPConnection, THTTPSConnection
+from    .errors    import ResponseError, NoSuchContainer, ContainerNotEmpty, \
                          InvalidContainerName, CDNNotEnabled, ContainerExists
-from    Queue     import Queue, Empty, Full
+from    queue     import Queue, Empty, Full
 from    time      import time
-import  consts
-from    authentication import Authentication
-from    fjson     import json_loads
+from . import  consts
+from    .authentication import Authentication
+from    .fjson     import json_loads
 from    sys       import version_info
 # Because HTTPResponse objects *have* to have read() called on them
 # before they can be used again ...
@@ -92,8 +93,11 @@ class Connection(object):
         self.connection_args = parse_url(url)
 
         if version_info[0] <= 2 and version_info[1] < 6:
-            self.conn_class = self.connection_args[3] and THTTPSConnection or \
-                                                              THTTPConnection
+            self.conn_class = self.connection_args[3] 
+            # and 
+            #TODO fix the following
+            #THTTPSConnection or \
+            #                                                  THTTPConnection
         else:
             self.conn_class = self.connection_args[3] and HTTPSConnection or \
                                                               HTTPConnection

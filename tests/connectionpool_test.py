@@ -1,5 +1,5 @@
 import unittest
-from misc       import printdoc
+from .misc       import printdoc
 from cloudfiles import ConnectionPool, Connection
 from cloudfiles.authentication import MockAuthentication as Auth
 

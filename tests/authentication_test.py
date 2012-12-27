@@ -1,6 +1,6 @@
 import unittest
 from cloudfiles.authentication import BaseAuthentication as Auth
-from misc import printdoc
+from .misc import printdoc
 
 
 class AuthenticationTest(unittest.TestCase):

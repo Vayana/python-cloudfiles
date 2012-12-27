@@ -1,10 +1,10 @@
 """ See COPYING for license information. """
 
 import re
-from urllib    import quote
-from urlparse  import urlparse
-from errors    import InvalidUrl
-from httplib   import HTTPConnection, HTTPSConnection, HTTP
+from urllib.parse    import quote
+from urllib.parse  import urlparse
+from .errors    import InvalidUrl
+from http.client   import HTTPConnection, HTTPSConnection
 
 
 def parse_url(url):
@@ -59,7 +59,7 @@ def unicode_quote(s):
     For more info see http://bugs.python.org/issue1712522 or
     http://mail.python.org/pipermail/python-dev/2006-July/067248.html
     """
-    if isinstance(s, unicode):
+    if isinstance(s, str):
         return quote(s.encode("utf-8"))
     else:
         return quote(str(s))
@@ -75,11 +75,11 @@ class THTTPConnection(HTTPConnection):
         self.sock.settimeout(self.timeout)
 
 
-class THTTP(HTTP):
-    _connection_class = THTTPConnection
-
-    def set_timeout(self, timeout):
-        self._conn.timeout = timeout
+#class THTTP(HTTP):
+#    _connection_class = THTTPConnection
+#
+#    def set_timeout(self, timeout):
+#        self._conn.timeout = timeout
 
 
 class THTTPSConnection(HTTPSConnection):
@@ -92,8 +92,8 @@ class THTTPSConnection(HTTPSConnection):
         self.sock.settimeout(self.timeout)
 
 
-class THTTPS(HTTP):
-    _connection_class = THTTPSConnection
-
-    def set_timeout(self, timeout):
-        self._conn.timeout = timeout
+#class THTTPS(HTTP):
+#    _connection_class = THTTPSConnection
+#
+#    def set_timeout(self, timeout):
+#        self._conn.timeout = timeout

@@ -1,5 +1,5 @@
 from tokenize  import  generate_tokens, STRING, NAME, OP
-from cStringIO import  StringIO
+from io import  StringIO
 from re        import  compile, DOTALL
 
 comments = compile(r'/\*.*\*/|//[^\r\n]*', DOTALL)

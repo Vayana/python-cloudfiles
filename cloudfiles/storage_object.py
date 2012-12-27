@@ -12,17 +12,18 @@ try:
     from hashlib import md5
 except ImportError:
     from md5 import md5
-import StringIO
+import io
 import mimetypes
 import os
 
-from errors  import ResponseError, NoSuchObject, \
+from .errors  import ResponseError, NoSuchObject, \
                     InvalidObjectName, IncompleteSend, \
                     InvalidMetaName, InvalidMetaValue
 
 from socket  import timeout
-import consts
-from utils   import unicode_quote, requires_name
+from . import consts
+from .utils   import unicode_quote, requires_name
+import collections
 
 # Because HTTPResponse objects *have* to have read() called on them
 # before they can be used again ...
@@ -148,7 +149,7 @@ class Object(object):
             while len(scratch) > 0:
                 buffer.write(scratch)
                 transferred += len(scratch)
-                if callable(callback):
+                if isinstance(callback, collections.Callable):
                     callback(transferred, self.size)
                 scratch = response.read(8192)
             return None
@@ -314,10 +315,10 @@ class Object(object):
             except IOError:
                 pass  # If the file descriptor is read-only this will fail
             self.size = int(os.fstat(data.fileno())[6])
-        elif isinstance(data, basestring):
-            data = StringIO.StringIO(data)
+        elif isinstance(data, str):
+            data = io.StringIO(data)
             self.size = data.len
-        elif isinstance(data, StringIO.StringIO):
+        elif isinstance(data, io.StringIO):
             self.size = data.len
         else:
             self.size = len(data)
@@ -349,11 +350,11 @@ class Object(object):
                     running_checksum.update(buff)
                 buff = data.read(4096)
                 transfered += len(buff)
-                if callable(callback):
+                if isinstance(callback, collections.Callable):
                     callback(transfered, self.size)
             response = http.getresponse()
             buff = response.read()
-        except timeout, err:
+        except timeout as err:
             if response:
                 # pylint: disable-msg=E1101
                 buff = response.read()
@@ -462,7 +463,7 @@ class Object(object):
         """
         self._name_check()
 
-        if isinstance(iterable, basestring):
+        if isinstance(iterable, str):
             # use write to buffer the string and avoid sending it 1 byte at a time
             self.write(iterable)
 
@@ -493,7 +494,7 @@ class Object(object):
         headers['User-Agent'] = self.container.conn.user_agent
         http = self.container.conn.connection
         http.putrequest('PUT', path)
-        for key, value in headers.iteritems():
+        for key, value in headers.items():
             http.putheader(key, value)
         http.endheaders()
 
@@ -515,7 +516,7 @@ class Object(object):
                 raise IncompleteSend()
             response = http.getresponse()
             buff = response.read()
-        except timeout, err:
+        except timeout as err:
             if response:
                 # pylint: disable-msg=E1101
                 response.read()
@@ -606,9 +607,9 @@ class Object(object):
             headers['Content-Type'] = 'application/octet-stream'
         for key in self.metadata:
             if len(key) > consts.meta_name_limit:
-                raise(InvalidMetaName(key))
+                raise InvalidMetaName
             if len(self.metadata[key]) > consts.meta_value_limit:
-                raise(InvalidMetaValue(self.metadata[key]))
+                raise InvalidMetaValue
             headers['X-Object-Meta-' + key] = self.metadata[key]
         headers.update(self.headers)
         return headers

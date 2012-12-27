@@ -9,12 +9,12 @@ containers inside of containers.
 See COPYING for license information.
 """
 
-from storage_object import Object, ObjectResults
-from errors import ResponseError, InvalidContainerName, InvalidObjectName, \
+from .storage_object import Object, ObjectResults
+from .errors import ResponseError, InvalidContainerName, InvalidObjectName, \
                    ContainerNotPublic, CDNNotEnabled
-from utils  import requires_name
-import consts
-from fjson  import json_loads
+from .utils  import requires_name
+from . import consts
+from .fjson  import json_loads
 
 # Because HTTPResponse objects *have* to have read() called on them
 # before they can be used again ...
@@ -46,7 +46,7 @@ class Container(object):
     """
     def __set_name(self, name):
         # slashes make for invalid names
-        if isinstance(name, (str, unicode)) and \
+        if isinstance(name, str) and \
                 ('/' in name or len(name) > consts.container_name_limit):
             raise InvalidContainerName(name)
         self._name = name

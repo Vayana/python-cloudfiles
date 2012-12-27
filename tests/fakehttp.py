@@ -17,14 +17,14 @@ from sys import version_info
 if version_info[0] <= 2 and version_info[1] < 6:
     from cloudfiles.utils import THTTPConnection as connbase
 else:
-    from httplib import HTTPConnection as connbase
+    from http.client import HTTPConnection as connbase
 
-import StringIO
+import io
 
 class FakeSocket(object):
     def __init__(self):
-        self._rbuffer = StringIO.StringIO()
-        self._wbuffer = StringIO.StringIO()
+        self._rbuffer = io.StringIO()
+        self._wbuffer = io.StringIO()
 
     def close(self):
         pass
@@ -49,14 +49,14 @@ class TrackerSocket(FakeSocket):
         return self._rbuffer.read(length)
 
     def _create_GET_account_content(self, path, args):
-        if args.has_key('format') and args['format'] == 'json':
+        if 'format' in args and args['format'] == 'json':
             containers = []
             containers.append('[\n');
             containers.append('{"name":"container1","count":2,"bytes":78},\n')
             containers.append('{"name":"container2","count":1,"bytes":39},\n')
             containers.append('{"name":"container3","count":3,"bytes":117}\n')
             containers.append(']\n')
-        elif args.has_key('format') and args['format'] == 'xml':
+        elif 'format' in args and args['format'] == 'xml':
             containers = []
             containers.append('<?xml version="1.0" encoding="UTF-8"?>\n')
             containers.append('<account name="FakeAccount">\n')
@@ -77,12 +77,12 @@ class TrackerSocket(FakeSocket):
     def _create_GET_container_content(self, path, args):
         left = 0
         right = 9
-        if args.has_key('offset'):
+        if 'offset' in args:
             left = int(args['offset'])
-        if args.has_key('limit'):
+        if 'limit' in args:
             right = left + int(args['limit'])
 
-        if args.has_key('format') and args['format'] == 'json':
+        if 'format' in args and args['format'] == 'json':
             objects = []
             objects.append('{"name":"object1",'
                            '"hash":"4281c348eaf83e70ddce0e07221c3d28",'
@@ -125,7 +125,7 @@ class TrackerSocket(FakeSocket):
                            '"content_type":"application\/octet-stream",'
                            '"last_modified":"2007-03-04 20:32:17"}')
             output = '[\n%s\n]\n' % (',\n'.join(objects[left:right]))
-        elif args.has_key('format') and args['format'] == 'xml':
+        elif 'format' in args and args['format'] == 'xml':
             objects = []
             objects.append('<object><name>object1</name>'
                            '<hash>4281c348eaf83e70ddce0e07221c3d28</hash>'
@@ -186,7 +186,7 @@ class TrackerSocket(FakeSocket):
             output = ''.join(objects)
 
         # prefix/path don't make much sense given our test data
-        if args.has_key('prefix') or args.has_key('path'):
+        if 'prefix' in args or 'path' in args:
             pass
         return output
 
@@ -276,10 +276,10 @@ if __name__ == '__main__':
     conn = CustomHTTPConnection('localhost', 8000)
     conn.request('HEAD', '/v1/account/container/object')
     response = conn.getresponse()
-    print "Status:", response.status, response.reason
+    print("Status:", response.status, response.reason)
     for (key, value) in response.getheaders():
-        print "%s: %s" % (key, value)
-    print response.read()
+        print("%s: %s" % (key, value))
+    print(response.read())
 
 
 # vim:set ai sw=4 ts=4 tw=0 expandtab:

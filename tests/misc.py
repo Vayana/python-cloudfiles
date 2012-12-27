@@ -29,7 +29,7 @@ def printdoc(f):
         stdout.write('\n')
         stdout.write('  ' + (74 * "~") + '\n')
     else:
-        print "%s: No docstring found!" % f.__name__
+        print("%s: No docstring found!" % f.__name__)
     return f
 
 # vim:set ai sw=4 ts=4 tw=0 expandtab:

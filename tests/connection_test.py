@@ -1,6 +1,6 @@
 import unittest
-from misc       import printdoc
-from fakehttp   import CustomHTTPConnection
+from .misc       import printdoc
+from .fakehttp   import CustomHTTPConnection
 from cloudfiles import Connection, Container
 from cloudfiles.authentication import MockAuthentication as Auth
 from cloudfiles.errors import InvalidContainerName
