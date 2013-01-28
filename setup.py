@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 from cloudfiles.consts import __version__
 
 setup(name='python-cloudfiles',
-      version=__version__,
+      version=__version__ + "_vayana",
       description='CloudFiles client library for Python',
       classifiers=[
         'Development Status :: 5 - Production/Stable',
